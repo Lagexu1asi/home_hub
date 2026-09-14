@@ -23,7 +23,7 @@ export default function Sheet({ open, title, onClose, children }: SheetProps) {
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center" onClick={onClose}>
+    <div className="fixed inset-0 z-[60] flex items-end justify-center" onClick={onClose}>
       {/* 遮罩 */}
       <div className="absolute inset-0 bg-black/40" />
       {/* 面板 */}
