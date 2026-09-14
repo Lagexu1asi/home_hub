@@ -49,6 +49,22 @@ export const useStore = create<Store>()(
     }),
     {
       name: 'home-hub:root',
+      /**
+       * 自定义合并策略：按 slice 逐层合并
+       * persist 默认 merge 是顶层浅合并，会把含 actions 的 do/eat/exercise
+       * 整体替换为持久化的"纯数据"对象，导致刷新后所有操作函数丢失。
+       * 此处在每个 slice 内部展开合并：数据取持久化值，actions 保留当前值。
+       */
+      merge: (persisted, current) => {
+        const p = (persisted ?? {}) as Partial<Store>
+        return {
+          ...current,
+          meta: { ...current.meta, ...p.meta },
+          do: { ...current.do, ...p.do },
+          eat: { ...current.eat, ...p.eat },
+          exercise: { ...current.exercise, ...p.exercise },
+        }
+      },
       /** 白名单：只持久化业务数据，排除所有 actions */
       partialize: (state) => ({
         meta: state.meta,
